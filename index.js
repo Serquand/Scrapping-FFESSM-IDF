@@ -103,7 +103,6 @@ const checkTypeForAll = informations => {
 
     for (let i = 0; i < informations.length; i++) { 
         const club = informations[i]       
-        console.log(club);
         if(!checkTypeForAClub(club)) continue;
         newInfo.push(club);
     }
@@ -113,7 +112,6 @@ const checkTypeForAll = informations => {
 
 const generateExcel = informations => {
     const wb = new excel.Workbook();
-    console.log(wb);
     const worksheet = wb.addWorksheet("Liste des clubs de plongée");
 
     worksheet.columns = [
