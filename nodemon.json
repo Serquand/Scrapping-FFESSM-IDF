@@ -1,0 +1,3 @@
+{
+    "exec": "HEAD=none node index.js"
+}

@@ -4,7 +4,9 @@
   "description": "Parce qu'à la main, c'est chiant xD",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "head": "HEAD=yes node index.js",
+    "headless": "HEAD=none node index.js"
   },
   "repository": {
     "type": "git",
