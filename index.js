@@ -126,7 +126,7 @@ const generateExcel = informations => {
 
     worksheet.addRows(informations);
 
-    wb.xlsx.writeFile("Test.xlsx")
+    wb.xlsx.writeFile("Liste des clubs.xlsx")
 }
 
 const main = async () => {
