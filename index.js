@@ -147,7 +147,6 @@ const main = async () => {
 
     informations = checkTypeForAll(informations.flat());
     generateExcel(informations);
-    console.log(informations);
 }
 
 main();
