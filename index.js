@@ -1,4 +1,5 @@
 import puppeteer from "puppeteer";
+import excel from "exceljs";
 
 const headless = process.env.HEAD == "none";
 
@@ -110,6 +111,26 @@ const checkTypeForAll = informations => {
     return newInfo;
 }
 
+const generateExcel = informations => {
+    const wb = new excel.Workbook();
+    console.log(wb);
+    const worksheet = wb.addWorksheet("Liste des clubs de plongée");
+
+    worksheet.columns = [
+        { header: 'Nom du club', key: 'name', width: 40 },
+        { header: 'Adresse du club', key: 'adress', width: 40 },
+        { header: 'Code postale', key: 'zipCode', width: 40 },
+        { header: 'Site Web', key: 'website', width: 40 },
+        { header: 'Numéro de téléphone', key: 'phone', width: 40 },
+        { header: 'Adresse email', key: 'email', width: 40 },
+        { header: 'Activités', key: 'activity', width: 40 },
+    ];
+
+    worksheet.addRows(informations);
+
+    wb.xlsx.writeFile("Test.xlsx")
+}
+
 const main = async () => {
     let informations = new Array();
 
@@ -125,7 +146,7 @@ const main = async () => {
     }
 
     informations = checkTypeForAll(informations.flat());
-
+    generateExcel(informations);
     console.log(informations);
 }
 

@@ -20,8 +20,11 @@
   },
   "homepage": "https://github.com/Serquand/Scrapping-FFESSM-IDF#readme",
   "dependencies": {
+    "excel4node": "^1.8.0",
+    "exceljs": "^4.3.0",
     "fs": "^0.0.1-security",
+    "msexcel-builder": "^0.0.2",
     "puppeteer": "^19.6.2"
-  }, 
+  },
   "type": "module"
 }
