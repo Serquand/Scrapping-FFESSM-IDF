@@ -1,0 +1,25 @@
+{
+  "name": "scrapping-ffessm-idf",
+  "version": "1.0.0",
+  "description": "Parce qu'à la main, c'est chiant xD",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Serquand/Scrapping-FFESSM-IDF.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Serquand/Scrapping-FFESSM-IDF/issues"
+  },
+  "homepage": "https://github.com/Serquand/Scrapping-FFESSM-IDF#readme",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "puppeteer": "^19.6.2"
+  }, 
+  "type": "module"
+}
