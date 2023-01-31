@@ -39,6 +39,7 @@ const scrapAllInfo = async (page) => {
     for(let i = 0; i < allInfoContainer.length; i++) {
         const info = await allInfoContainer[i].evaluate((domElement) => {
             const infoUtile = {
+                clubNumber: 0,
                 name: 1, 
                 adress: 3, 
                 zipCode: 4, 
@@ -125,7 +126,6 @@ const generateExcel = informations => {
     allActivity.addRows(informations.allActivity);
 
     const keys = Object.keys(informations);
-
     for(let i = 0; i < keys.length; i++) {
         if(keys[i] == "allActivity") continue;
         
@@ -164,7 +164,6 @@ const groupByActivities = clubs => {
         const thisActivities = clubs[i].activity.split(", ");
 
         for(let j = 0; j < thisActivities.length; j++) {
-            console.log(thisActivities[j]);
             if(interestingActivities.includes(thisActivities[j])) {
                 if(activities[thisActivities[j]]) {
                     activities[thisActivities[j]].push(clubs[i]);
@@ -176,6 +175,43 @@ const groupByActivities = clubs => {
     }
 
     return activities;
+}
+
+//best stands for 94
+//vachette stands for 77
+const sortCategory = informations => {
+    const paris = new Array(); 
+    const best = new Array(); 
+    const vachette = new Array();
+    const yvelines = new Array();
+    const essone = new Array();
+    const hautDeSeine = new Array();
+    const saintDenis = new Array();
+    const valOise = new Array();
+
+    for(let i = 0; i < informations.length; i++) {
+        const depart = informations[i].clubNumber.slice(0, 2);
+        if(depart == 75) paris.push(informations[i]);
+        if(depart == 77) vachette.push(informations[i]);
+        if(depart == 78) yvelines.push(informations[i]);
+        if(depart == 91) essone.push(informations[i]);
+        if(depart == 92) hautDeSeine.push(informations[i]);
+        if(depart == 93) saintDenis.push(informations[i]);
+        if(depart == 94) best.push(informations[i]);
+        if(depart == 95) valOise.push(informations[i]);
+    }
+
+    return [...paris, ...best, ...essone, ...vachette, ...saintDenis, ...hautDeSeine, ...yvelines, ...valOise]
+}
+
+const orderByDepartement = informations => {
+    const keys = Object.keys(informations);
+
+    for(let i = 0; i < keys.length; i++) {
+        informations[keys[i]] = sortCategory(informations[keys[i]]);
+    }
+
+    return informations;
 }
 
 const main = async () => {
@@ -195,7 +231,7 @@ const main = async () => {
     informations = checkTypeForAll(informations.flat());
     informations = checkContact(informations);
     informations = groupByActivities(informations);
-    console.log(informations.allActivity.length, Object.keys(informations));
+    informations = orderByDepartement(informations);
 
     generateExcel(informations);
 }
