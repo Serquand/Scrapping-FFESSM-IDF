@@ -82,7 +82,6 @@ const navigateNextPage = async (page) => {
 
 const checkTypeForAClub = club => {
     const interestingActivities = [
-        "PLONGÉE ENFANT", 
         "PLONGÉE SPORTIVE EN PISCINE", 
         "TECHNIQUE", 
         "PLONGÉE SOUTERRAINE",
@@ -112,9 +111,9 @@ const checkTypeForAll = informations => {
 
 const generateExcel = informations => {
     const wb = new excel.Workbook();
-    const worksheet = wb.addWorksheet("Liste des clubs de plongée");
 
-    worksheet.columns = [
+    const allActivity = wb.addWorksheet("Liste des clubs de plongée");
+    allActivity.columns = [
         { header: 'Nom du club', key: 'name', width: 40 },
         { header: 'Adresse du club', key: 'adress', width: 40 },
         { header: 'Code postale', key: 'zipCode', width: 40 },
@@ -123,10 +122,60 @@ const generateExcel = informations => {
         { header: 'Adresse email', key: 'email', width: 40 },
         { header: 'Activités', key: 'activity', width: 40 },
     ];
+    allActivity.addRows(informations.allActivity);
 
-    worksheet.addRows(informations);
+    const keys = Object.keys(informations);
+
+    for(let i = 0; i < keys.length; i++) {
+        if(keys[i] == "allActivity") continue;
+        
+        const worksheet = wb.addWorksheet(keys[i]);
+        worksheet.columns = [
+            { header: 'Nom du club', key: 'name', width: 40 },
+            { header: 'Adresse du club', key: 'adress', width: 40 },
+            { header: 'Code postale', key: 'zipCode', width: 40 },
+            { header: 'Site Web', key: 'website', width: 40 },
+            { header: 'Numéro de téléphone', key: 'phone', width: 40 },
+            { header: 'Adresse email', key: 'email', width: 40 },
+            { header: 'Activités', key: 'activity', width: 40 },
+        ];
+        worksheet.addRows(informations[keys[i]]);
+    }
 
     wb.xlsx.writeFile("Liste des clubs.xlsx")
+}
+
+const checkContact = clubs => {
+    return clubs.filter(club => {
+        return club.email !== "" && club.phone !== ""
+    })
+}
+
+const groupByActivities = clubs => {
+    const activities = { allActivity: clubs };
+    const interestingActivities = [
+        "PLONGÉE SPORTIVE EN PISCINE", 
+        "TECHNIQUE", 
+        "PLONGÉE SOUTERRAINE",
+        "PLONGÉE HANDISUB",
+    ];
+
+    for(let i = 0; i < clubs.length; i++) {
+        const thisActivities = clubs[i].activity.split(", ");
+
+        for(let j = 0; j < thisActivities.length; j++) {
+            console.log(thisActivities[j]);
+            if(interestingActivities.includes(thisActivities[j])) {
+                if(activities[thisActivities[j]]) {
+                    activities[thisActivities[j]].push(clubs[i]);
+                } else {
+                    activities[thisActivities[j]] = [clubs[i]];
+                }
+            }
+        }
+    }
+
+    return activities;
 }
 
 const main = async () => {
@@ -140,10 +189,14 @@ const main = async () => {
         informations.push(await scrapAllInfo(page));
         if(i != maxPage - 1) navigateNextPage(page);
         console.log(i);
-        await sleep(2000);
+        await sleep(1000);
     }
 
     informations = checkTypeForAll(informations.flat());
+    informations = checkContact(informations);
+    informations = groupByActivities(informations);
+    console.log(informations.allActivity.length, Object.keys(informations));
+
     generateExcel(informations);
 }
 
